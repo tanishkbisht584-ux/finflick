@@ -59,6 +59,7 @@ section{position:relative}
 /* top bar */
 .bar{position:fixed;inset:0 0 auto 0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:calc(14px + env(safe-area-inset-top,0px)) var(--gutter) 14px;pointer-events:none}
 .bar>*{pointer-events:auto}
+.bar.over{--ink:#E8E6E3;--bg:#0E100F;--border:rgba(232,230,227,.3);--surface:rgba(232,230,227,.12);--dim:#B8BDB9;color:var(--ink)}
 .clock{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .clock .st{display:inline-flex;align-items:center;gap:6px}
 .clock .pip{width:7px;height:7px;border-radius:50%;background:var(--dim)}
@@ -83,8 +84,25 @@ section{position:relative}
 [data-theme="light"] .tgl .moon{display:none}
 @media (max-width:640px){.bar{grid-template-columns:1fr auto auto;gap:10px}.bar .mark{display:none}.clock .lbl{display:none}.btn .t{display:none}.btn{padding:0 14px}}
 
+/* photo layers */
+.ph{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.ph img{position:absolute;inset:-6% 0 0 0;width:100%;height:112%;object-fit:cover;object-position:center;will-change:transform;transform:translateY(calc(var(--py,0)*1px))}
+.ph::after{content:"";position:absolute;inset:0;background:var(--wash)}
+section>.ph~*{z-index:1}
+section>.ph~:not(.badge,.dots,.cap){position:relative}
+[data-theme="light"] .ph img{filter:saturate(.9)}
+
 /* hero */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px var(--gutter) 96px;position:relative}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px var(--gutter) 96px;position:relative;--wash:linear-gradient(180deg,rgba(14,16,15,.55) 0%,rgba(14,16,15,.62) 45%,var(--bg) 100%)}
+[data-theme="light"] .hero{--wash:linear-gradient(180deg,rgba(14,16,15,.5) 0%,rgba(14,16,15,.55) 45%,var(--bg) 100%)}
+.hero .ph img{animation:kb 14s var(--ease) forwards;transform-origin:50% 40%}
+@keyframes kb{from{scale:1.12}to{scale:1}}
+[data-theme="light"] .hero h1,[data-theme="light"] .hero .sub b{color:#fff}
+[data-theme="light"] .hero .sub{color:#D9DCDA}
+.hero .btn:not(.fill){border-color:#E8E6E3;color:#E8E6E3}
+.hero .btn:not(.fill):hover{background:#E8E6E3;color:#0E100F}
+.hero .dots,.hero .badge text{fill:#B8BDB9;color:#B8BDB9}
+.hero .badge .dn{color:#E8E6E3;border-color:rgba(232,230,227,.35)}
 h1{margin:0;font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:clamp(48px,11.6vw,184px);line-height:.9;letter-spacing:-.045em}
 h1 .l{display:block}
 h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
@@ -94,6 +112,8 @@ h1 .w i{display:inline-block;font-style:normal;transform:translateY(112%);animat
 .sub b{color:var(--ink);font-weight:600}
 @keyframes fade{to{opacity:1}}
 .hero .cta{margin-top:44px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fade 1s var(--ease) 1s forwards}
+.hero .cap{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8E938F;opacity:0;animation:fade 1s var(--ease) 1.6s forwards;white-space:nowrap}
+@media (max-width:640px){.hero .cap{display:none}}
 .badge{position:absolute;right:var(--gutter);bottom:36px;width:112px;height:112px;display:grid;place-items:center;opacity:0;animation:fade 1s var(--ease) 1.3s forwards}
 .badge svg{position:absolute;inset:0;animation:spin 14s linear infinite}
 .badge text{font-family:var(--mono);font-size:10px;letter-spacing:.16em;fill:var(--dim)}
@@ -202,14 +222,31 @@ h1 .w i{display:inline-block;font-style:normal;transform:translateY(112%);animat
 .m-gloss .tip b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:4px}
 @media (max-width:820px){.grid{grid-template-columns:1fr}.f{min-height:0}}
 
+/* city row (the reference's parallax work cards) */
+.city{padding:0 var(--gutter) 112px;max-width:1520px;margin-inline:auto}
+.city .eyebrow{margin-bottom:28px}
+.city .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.shot{position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;border:1px solid var(--border);background:var(--surface);opacity:.4;transform:translateY(36px) scale(.94);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.shot.in{opacity:1;transform:none}
+.shot img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;transform:translateY(calc(var(--py,0)*1px)) scale(var(--sc,1));transition:scale .8s var(--ease);will-change:transform}
+.shot:hover img{--sc:1.06}
+.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,16,15,0) 40%,rgba(14,16,15,.85) 100%)}
+.shot .t{position:absolute;left:24px;right:24px;bottom:22px;z-index:1;color:#E8E6E3}
+.shot .t .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.shot .t h3{margin:8px 0 6px;font-family:var(--display);font-weight:600;font-size:clamp(22px,2vw,28px);letter-spacing:-.03em;line-height:1.05}
+.shot .t p{margin:0;font-size:14px;color:#B8BDB9;max-width:34ch}
+.shot .n{position:absolute;top:20px;left:24px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:#E8E6E3;z-index:1}
+@media (max-width:820px){.city .row{grid-template-columns:1fr}.shot{aspect-ratio:16/11}}
+
 /* numbers */
-.nums{border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr)}
-.nums div{padding:40px var(--gutter);border-right:1px solid var(--border)}
-.nums div:last-child{border-right:0}
+.nums{position:relative;border-top:1px solid var(--border);border-bottom:1px solid var(--border);--wash:linear-gradient(90deg,rgba(14,16,15,.78),rgba(14,16,15,.45) 50%,rgba(14,16,15,.72));color:#E8E6E3}
+.nums .cells{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,1fr)}
+.nums .cells div{padding:56px var(--gutter);border-right:1px solid rgba(232,230,227,.14)}
+.nums .cells div:last-child{border-right:0}
 .nums b{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(36px,4.4vw,64px);letter-spacing:-.04em;line-height:1}
-.nums b small{font-size:.5em;color:var(--dim);letter-spacing:0}
-.nums span{display:block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-@media (max-width:900px){.nums{grid-template-columns:repeat(2,1fr)}.nums div{border-bottom:1px solid var(--border)}.nums div:nth-child(2n){border-right:0}.nums div:last-child{grid-column:1/-1}}
+.nums b small{font-size:.5em;color:#B8BDB9;letter-spacing:0}
+.nums span{display:block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B8BDB9}
+@media (max-width:900px){.nums .cells{grid-template-columns:repeat(2,1fr)}.nums .cells div{border-bottom:1px solid rgba(232,230,227,.14)}.nums .cells div:nth-child(2n){border-right:0}.nums .cells div:last-child{grid-column:1/-1;border-bottom:0}}
 
 /* principles */
 .pr{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
@@ -222,16 +259,22 @@ h1 .w i{display:inline-block;font-style:normal;transform:translateY(112%);animat
 @media (max-width:560px){.pr{grid-template-columns:1fr}.pr div{min-height:0}}
 
 /* get */
-.get{text-align:center}
+.get{text-align:center;max-width:none;padding:140px var(--gutter);color:#E8E6E3;--wash:linear-gradient(180deg,var(--bg) 0%,rgba(14,16,15,.72) 30%,rgba(14,16,15,.72) 70%,var(--bg) 100%)}
+.get>*{max-width:1520px;margin-inline:auto}
+[data-theme="light"] .get{--wash:linear-gradient(180deg,rgba(14,16,15,.82),rgba(14,16,15,.7) 50%,rgba(14,16,15,.82));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.get .eyebrow{color:#B8BDB9}
 .get h2{margin-bottom:28px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:980px;margin:0 auto 44px;text-align:left}
-.steps div{border:1px solid var(--border);border-radius:18px;padding:22px}
-.steps .k{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--green-ink)}
+.steps div{border:1px solid rgba(232,230,227,.18);border-radius:18px;padding:22px;background:rgba(14,16,15,.55);backdrop-filter:blur(10px)}
+.steps .k{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--green)}
 .steps h3{margin:12px 0 6px;font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.02em}
-.steps p{margin:0;color:var(--dim);font-size:14.5px}
+.steps p{margin:0;color:#B8BDB9;font-size:14.5px}
 .get .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .get .btn{min-height:56px;padding:0 26px;font-size:14px;border-radius:12px}
-.get .note{margin-top:22px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.get .btn:not(.fill){border-color:#E8E6E3;color:#E8E6E3}
+.get .btn:not(.fill):hover{background:#E8E6E3;color:#0E100F}
+.get .btn.soon{border-color:rgba(232,230,227,.35);color:#B8BDB9}
+.get .note{margin-top:22px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B8BDB9}
 @media (max-width:760px){.steps{grid-template-columns:1fr}}
 
 /* footer */
@@ -242,6 +285,9 @@ footer{border-top:1px solid var(--border);padding:40px var(--gutter) calc(40px +
 footer .mono{color:var(--dim)}
 footer .links{display:flex;gap:22px}
 footer .links a:hover{color:var(--green-ink)}
+.credits{max-width:1520px;margin:0 auto;padding:0 var(--gutter) calc(28px + env(safe-area-inset-bottom,0px));font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim);line-height:1.8}
+.credits a{text-decoration:underline dotted;text-underline-offset:3px}
+.credits a:hover{color:var(--ink)}
 
 /* cursor */
 #cur,#ring{position:fixed;left:0;top:0;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);display:none}
@@ -255,7 +301,7 @@ html.has-cur #cur,html.has-cur #ring{display:block}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
-  h1 .w i{transform:none}.sub,.hero .cta,.badge,.hero .dots{opacity:1}.f{opacity:1;transform:none}
+  h1 .w i{transform:none}.sub,.hero .cta,.badge,.hero .dots,.hero .cap{opacity:1}.f,.shot{opacity:1;transform:none}.hero .ph img{animation:none}
 }
 </style>
 </head>
@@ -279,6 +325,7 @@ html.has-cur #cur,html.has-cur #ring{display:block}
 
 <main id="top">
 <section class="hero">
+  <div class="ph" data-par="0.18"><img src="img/hero-2560.jpg" srcset="img/hero-1440.jpg 1440w, img/hero-2560.jpg 2560w, img/hero-3840.jpg 3840w" sizes="100vw" alt="" fetchpriority="high"></div>
   <h1 aria-label="Market news that explains itself">
     <span class="l"><span class="w"><i style="--i:0">Market</i></span> <span class="w"><i style="--i:1">news</i></span></span>
     <span class="l"><span class="w"><i style="--i:2">that</i></span> <span class="w"><i style="--i:3">explains</i></span> <span class="w"><i style="--i:4">itself</i></span></span>
@@ -289,6 +336,7 @@ html.has-cur #cur,html.has-cur #ring{display:block}
     <a class="btn mag" href="#demo" data-cur="SEE">See how it feels <span class="ar">↓</span></a>
   </div>
   <div class="dots" aria-hidden="true">FREE · ANDROID · MADE IN INDIA</div>
+  <div class="cap" aria-hidden="true">Marine Drive, Mumbai</div>
   <a class="badge" href="#demo" aria-label="Scroll to the demo">
     <svg viewBox="0 0 112 112" aria-hidden="true"><defs><path id="cp" d="M56 56 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0"/></defs><text><textPath href="#cp">ANDROID · FREE · MADE IN INDIA ·</textPath></text></svg>
     <span class="dn" aria-hidden="true">↓</span>
@@ -344,12 +392,25 @@ html.has-cur #cur,html.has-cur #ring{display:block}
   </div>
 </section>
 
+<section class="city" id="city" aria-labelledby="cityh">
+  <div class="eyebrow">Built for Dalal Street</div>
+  <h2 id="cityh" class="sr">Built for Dalal Street</h2>
+  <div class="row">
+    <figure class="shot" data-cur="BSE" style="margin:0"><img src="img/bse-1000.jpg" srcset="img/bse-1000.jpg 1000w, img/bse-1600.jpg 1600w" sizes="(max-width:820px) 100vw, 33vw" alt="The Bombay Stock Exchange building on Dalal Street, its ticker lit" loading="lazy"><span class="n">01</span><figcaption class="t"><span class="k">Where it starts</span><h3>Every filing, the moment it lands</h3><p>Exchange filings and results are read first, wires second.</p></figcaption></figure>
+    <figure class="shot" data-cur="CITY" style="margin:0"><img src="img/skyline-1000.jpg" srcset="img/skyline-1000.jpg 1000w, img/skyline-1600.jpg 1600w" sizes="(max-width:820px) 100vw, 33vw" alt="Mumbai skyline at night" loading="lazy"><span class="n">02</span><figcaption class="t"><span class="k">Who it's for</span><h3>Built for the 9:15 commute</h3><p>Fifteen seconds a story. The whole morning before the bell.</p></figcaption></figure>
+    <figure class="shot" data-cur="LIVE" style="margin:0"><img src="img/sealink-1000.jpg" srcset="img/sealink-1000.jpg 1000w, img/sealink-1600.jpg 1600w" sizes="(max-width:820px) 100vw, 33vw" alt="Bandra–Worli Sea Link lit at night" loading="lazy"><span class="n">03</span><figcaption class="t"><span class="k">When it runs</span><h3>Live while the market is</h3><p>LIVE refreshes every 15 seconds from 9:15 to 3:30. Quiet after.</p></figcaption></figure>
+  </div>
+</section>
+
 <div class="nums" id="nums">
+  <div class="ph" data-par="0.12"><img src="img/nightsky-2560.jpg" srcset="img/nightsky-1440.jpg 1440w, img/nightsky-2560.jpg 2560w, img/nightsky-3840.jpg 3840w" sizes="100vw" alt="" loading="lazy"></div>
+  <div class="cells">
   <div><b data-n="55">0</b><span>News sources</span></div>
   <div><b data-n="32">0</b><span>Market ledgers</span></div>
   <div><b data-n="39">0</b><span>Screener metrics</span></div>
   <div><b data-n="20">0</b><span>Stock-page sections</span></div>
   <div><b data-n="15">0<small> s</small></b><span>Per story</span></div>
+  </div>
 </div>
 
 <section class="sec" id="principles">
@@ -364,6 +425,7 @@ html.has-cur #cur,html.has-cur #ring{display:block}
 </section>
 
 <section class="sec get" id="get">
+  <div class="ph" data-par="0.14"><img src="img/coastal-2560.jpg" srcset="img/coastal-1440.jpg 1440w, img/coastal-2560.jpg 2560w, img/coastal-3840.jpg 3840w" sizes="100vw" alt="" loading="lazy"></div>
   <div class="eyebrow" style="justify-content:center">Android · free</div>
   <h2>Get FinFlick</h2>
   <div class="steps">
@@ -384,6 +446,7 @@ html.has-cur #cur,html.has-cur #ring{display:block}
   <div class="links mono"><a href="#features">Features</a><a href="#principles">Principles</a><a href="#get">Download</a><a id="mail" href="#" hidden>Contact</a></div>
   <div class="mono">Information, not investment advice · Made in India · © 2026 FinFlick</div>
 </footer>
+<div class="credits">Photos via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Marine_Lines_Mumbai_2021.jpg" rel="noopener" target="_blank">Marine Lines</a> © Dr Vikramjit Kakati (CC BY-SA 4.0) · <a href="https://commons.wikimedia.org/wiki/File:BSE_building_at_Dalal_Street.JPG" rel="noopener" target="_blank">BSE building</a> © BSEINDIA (CC BY-SA 3.0) · <a href="https://commons.wikimedia.org/wiki/File:Mumbai_Night_City_(18219784390).jpg" rel="noopener" target="_blank">Mumbai Night City</a> © Skye Vidur (CC BY-SA 2.0) · <a href="https://commons.wikimedia.org/wiki/File:Bandra_Worli_Sea_Link_at_night.jpg" rel="noopener" target="_blank">Sea Link</a> © Navin Thakur (CC BY 2.0) · <a href="https://commons.wikimedia.org/wiki/File:A_night_in_Mumbai.jpg" rel="noopener" target="_blank">A night in Mumbai</a> © Siddharth Shah (CC BY-SA 4.0) · <a href="https://commons.wikimedia.org/wiki/File:Coastal_Road_(Mumbai),_by_night.jpg" rel="noopener" target="_blank">Coastal Road</a> © Qiw007 (CC BY 4.0). Cropped and colour-graded.</div>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
@@ -457,7 +520,19 @@ var CONTACT   = '[CONTACT_EMAIL]';
 
   // reveal cards + count numbers
   var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }) },{threshold:.2});
-  $$('.f').forEach(function(f){io.observe(f)});
+  $$('.f,.shot').forEach(function(f){io.observe(f)});
+
+  // photo parallax — each layer drifts against scroll by its data-par factor
+  var pars=$$('[data-par]').map(function(el){return {el:el,img:el.querySelector('img'),k:+el.getAttribute('data-par')}}).concat($$('.shot').map(function(el){return {el:el,img:el.querySelector('img'),k:.1}}));
+  var vh=innerHeight; addEventListener('resize',function(){vh=innerHeight},{passive:true});
+  var bar=$('.bar'), hero=$('.hero');
+  function par(){
+    bar.classList.toggle('over', hero.getBoundingClientRect().bottom>80);
+    if(reduce) return;
+    pars.forEach(function(p){ var r=p.el.getBoundingClientRect(); if(r.bottom<0||r.top>vh) return; var c=(r.top+r.height/2-vh/2)/vh; p.img.style.setProperty('--py',(c*p.k*r.height).toFixed(1)); });
+  }
+  if(lenis) lenis.on('scroll',par); else addEventListener('scroll',par,{passive:true});
+  par();
   var counted=false, nums=$$('#nums b');
   var io2=new IntersectionObserver(function(es){ if(counted||!es[0].isIntersecting)return; counted=true;
     nums.forEach(function(b){ var n=+b.getAttribute('data-n'), small=b.querySelector('small'), t0=performance.now(), d=reduce?1:1300;
