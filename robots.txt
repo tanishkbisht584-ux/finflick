@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tanishkbisht584-ux.github.io/finflick/sitemap.xml
