@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
   <!-- FinFlick mark: three fanned story cards (the flick), an "ff" monogram on the front card,
-       and an arrow sweeping up through the stack. Green #3ECF8E, ink #0E100F. -->
+       and an arrow sweeping up through the stack. Dark-ground version. -->
   <rect x="30" y="22" width="40" height="54" rx="4" fill="#2E332F" stroke="#3ECF8E" stroke-width="2" transform="rotate(-22 50 50)"/>
   <rect x="30" y="22" width="40" height="54" rx="4" fill="#2E332F" stroke="#3ECF8E" stroke-width="2" transform="rotate(-11 50 50)"/>
   <rect x="30" y="22" width="40" height="54" rx="4" fill="#3ECF8E" transform="rotate(2 50 50)"/>
   <text x="50" y="55" text-anchor="middle" font-family="Georgia,'Noto Serif',serif" font-style="italic" font-weight="700" font-size="30" fill="#0E100F" transform="rotate(2 50 50)">ff</text>
-  <path d="M24 78 C 42 76, 62 62, 78 36" fill="none" stroke="#0E100F" stroke-width="5" stroke-linecap="round"/>
-  <polygon points="74,30 88,22 82,42" fill="#0E100F"/>
+  <path d="M24 78 C 42 76, 62 62, 78 36" fill="none" stroke="#E8E6E3" stroke-width="5" stroke-linecap="round"/>
+  <polygon points="74,30 88,22 82,42" fill="#E8E6E3"/>
 </svg>
