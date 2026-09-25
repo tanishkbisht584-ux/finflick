@@ -56,6 +56,7 @@
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:auto}
+html,body{overflow-x:clip}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.5;overflow-x:hidden}
 body.locked{overflow:hidden}
 a{color:inherit;text-decoration:none}
@@ -365,6 +366,56 @@ footer .r{text-align:right;font-family:var(--mono);font-size:10px;letter-spacing
 #ring.hide{opacity:0}
 html.has-cur,html.has-cur *{cursor:none!important}
 html.has-cur #cur,html.has-cur #ring{display:block}
+
+.feat li:not(.open) .motif{visibility:hidden}
+.drag-hint p{text-shadow:0 1px 10px rgba(0,0,0,.9)}
+
+/* ── phones ── */
+@media (max-width:760px){
+  /* footer never wider than the screen */
+  footer{grid-template-columns:1fr;gap:16px}
+  footer nav{flex-wrap:wrap;gap:10px 18px}
+  footer nav a{padding:4px 0}
+  footer .r{text-align:left;line-height:1.7}
+  #mail{word-break:break-all}
+  /* loader */
+  #loader .tag{max-width:32ch}
+  #loader .acts{width:100%;max-width:340px}
+  /* 3D world: scrims so overlay text never sits on card text */
+  body:not(.no-gl) .ov.top::before{content:"";position:absolute;left:0;right:0;top:0;height:120px;background:linear-gradient(180deg,#0E100F 0%,rgba(14,16,15,.85) 45%,rgba(14,16,15,0));z-index:-1;pointer-events:none}
+  body:not(.no-gl) .ov.bot::before{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(100% + 70px);background:linear-gradient(180deg,rgba(14,16,15,0) 0%,rgba(14,16,15,.9) 38%,#0E100F 70%);z-index:-1;pointer-events:none}
+  .bl{mix-blend-mode:normal}
+  .bot{gap:12px}
+  .title{width:100%;gap:12px}
+  .title h2{font-size:30px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .filters::-webkit-scrollbar{display:none}
+  .pill{flex:0 0 auto}
+  .hints{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 14px}
+  .hints .h{font-size:11px}
+  .hints a{font-size:12px}
+  /* video band: caption and quote stacked, not colliding */
+  .band .big{left:var(--gutter);right:var(--gutter);bottom:46px;font-size:28px;line-height:1.05}
+  .band .cap{bottom:18px}
+  /* calm path: stories as a sideways swipe row instead of a tall stack */
+  .fallback{padding-top:18px}
+  .fallback .fg{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none}
+  .fallback .fg::-webkit-scrollbar{display:none}
+  .fcard{scroll-snap-align:start;aspect-ratio:auto;min-height:300px}
+  /* minimum readable size for small labels */
+  .fcard .s,.m-tabs span,.m-pre span,.m-ledger i,.shot .k,.band .cap,.steps .k,.get .note,.get .cap2,.credits,footer .r,.clock,.pill small,.m-gloss .tip b,.read .gl b,.read .foot,.nums span{font-size:11px}
+  /* spacing polish */
+  .get .lbl{margin-bottom:12px}
+  .read{padding:12px}
+  .read article{padding:30px 22px 24px}
+  .read h2{font-size:28px}
+  .read p{font-size:17px}
+  .feat .motif{contain:paint}
+  .feat h3 .g{display:none}
+  .feat .row:hover h3 .s{transform:none}
+  .shot .n{background:rgba(10,10,10,.55);padding:3px 7px;border-radius:6px}
+  .intro p{max-width:none;line-height:1.12}
+}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
